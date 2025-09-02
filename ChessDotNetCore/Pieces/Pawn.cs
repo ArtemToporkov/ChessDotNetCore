@@ -150,6 +150,8 @@ namespace ChessDotNetCore.Pieces
             }
             if (checkEnPassant)
             {
+                if (game.EnPassant == destination)
+                    return true;
                 ReadOnlyCollection<DetailedMove> _moves = game.Moves;
                 if (_moves.Count == 0)
                 {
