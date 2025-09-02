@@ -283,6 +283,48 @@ namespace ChessDotNetCore.Tests
             game.HalfMoveClock.Should().Be(0);
             game.FullMoveNumber.Should().Be(2);
         }
+        
+        [TestMethod]
+        public void TestChessGameFenConstructor_WhiteHasEnPassant()
+        {
+            const string fen = "rnbqkbnr/ppp1pppp/8/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 1";
+            var game = new ChessGame(fen);
+            game.EnPassant.Should().Be(new Position(Line.d, 6));
+        }
+        
+        [TestMethod]
+        public void TestChessGameFenConstructor_WhiteCanDoEnPassant()
+        {
+            const string fen = "rnbqkbnr/ppp1pppp/8/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 1";
+            var game = new ChessGame(fen);
+            var move = new Move(
+                new Position(Line.e, 5),
+                new Position(Line.d, 6),
+                Player.White);
+            var moveType = game.MakeMove(move, false);
+            moveType.Should().HaveFlag(MoveType.EnPassant);
+        }
+
+        [TestMethod]
+        public void TestChessGameFenConstructor_BlackHasEnPassant()
+        {
+            const string fen = "rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
+            var game = new ChessGame(fen);
+            game.EnPassant.Should().Be(new Position(Line.e, 3));
+        }
+        
+        [TestMethod]
+        public void TestChessGameFenConstructor_BlackCanDoEnPassant()
+        {
+            const string fen = "rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
+            var game = new ChessGame(fen);
+            var move = new Move(
+                new Position(Line.d, 4),
+                new Position(Line.e, 3),
+                Player.Black);
+            var moveType = game.MakeMove(move, false);
+            moveType.Should().HaveFlag(MoveType.EnPassant);
+        }
 
         [TestMethod]
         public void TestChessGameFenConstructorInvalid()
